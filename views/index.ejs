@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>My Application</title>
+</head>
+<body>
+	<h1>Registration Form:</h1>
+	<ul class="users">
+	<% for(var i =0; i < users.length; i++) {%>
+		<li class="user">
+			<span><%= users[i].firstName %></span>
+			<span><%= users[i].lastName %></span>
+			<span><%= users[i].email %></span>
+		</li>
+		<% } %>
+	</ul>
+
+	<form action="/users" method="POST">
+		<input type="text" placeholder="First Name" name="firstName">
+		<input type="text" placeholder="Last Name" name="lastName">
+		<input type="email" placeholder="Email" name="email">
+		<input type="password" name="password">
+		<button type="submit">Submit</button>
+	</form>
+	<div>
+		<h2> Update Record</h2>
+		<button id="update">Update Record!</button>
+	</div>
+	<!-- Adding customised main.js file -->
+	<script src="main.js"></script>
+</body>
+</html>
+			
