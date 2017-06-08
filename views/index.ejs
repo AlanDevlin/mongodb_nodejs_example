@@ -2,33 +2,31 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>My Application</title>
+	<title>To Do List</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </head>
 <body>
-	<h1>Registration Form:</h1>
-	<ul class="users">
-	<% for(var i =0; i < users.length; i++) {%>
-		<li class="user">
-			<span><%= users[i].firstName %></span>
-			<span><%= users[i].lastName %></span>
-			<span><%= users[i].email %></span>
+	<h1>To Do:</h1>
+	<ul class="items">
+	<% for(var i =0; i < items.length; i++) {%>
+		<li class="item">
+			<span id="list_item"><%= items[i].todo %></span>
+			<input class="update-box" type="text" name="todo" style="display:none;"/><button type="submit" style="display:none;">Submit</button>
+			<button class="update">Update Record!</button>
+			<button class="delete" onclick="deleteItem('<%= items[i].todo %>')">Delete Record!</button>
+			
 		</li>
 		<% } %>
 	</ul>
 
-	<form action="/users" method="POST">
-		<input type="text" placeholder="First Name" name="firstName">
-		<input type="text" placeholder="Last Name" name="lastName">
-		<input type="email" placeholder="Email" name="email">
-		<input type="password" name="password">
+	<form action="/items" method="POST">
+		<input type="text" placeholder="What needs to be done?" name="todo">
+		<input type="text" name="status" value="uncomplete" hidden>
 		<button type="submit">Submit</button>
 	</form>
-	<div>
-		<h2> Update Record</h2>
-		<button id="update">Update Record!</button>
-	</div>
 	<!-- Adding customised main.js file -->
 	<script src="main.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </body>
 </html>
 			

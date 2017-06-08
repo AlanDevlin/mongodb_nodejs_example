@@ -14,6 +14,9 @@ const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: true}));
 
+//Tell server to read JSON data
+app.use(bodyParser.json());
+
 //Adding MongoDB Connection
 const MongoClient = require('mongodb').MongoClient;
 
@@ -34,7 +37,7 @@ app.use(express.static('public'));
 //Port number the application will run on
 const port_number = 3000;
 //MongoDB Connection URL
-var url = 'mongodb://localhost:27017/crud_application';
+var url = 'mongodb://localhost:27017/list';
 var db;
 
 /**********************************************************************
@@ -65,12 +68,12 @@ MongoClient.connect(url, (err, database) => {
  *
  **********************************************************************/
 app.get('/', (req, res) => {
-	db.collection('users').find().toArray((err, result) => {
+	db.collection('items').find().toArray((err, result) => {
 	if(err) {
 		return console.log(err);
 	}
 	else {
-		res.render('index.ejs', {users:result});
+		res.render('index.ejs', {items:result});
 		}
 	});
 });
@@ -82,8 +85,8 @@ app.get('/', (req, res) => {
  *
  *
  ************************************************************************/
-app.post('/users', (req, res) => {
-	db.collection('users').save(req.body, (err, result) => {
+app.post('/items', (req, res) => {
+	db.collection('items').save(req.body, (err, result) => {
 		if(err) {
 			return console.log(err);
 		}
@@ -92,4 +95,45 @@ app.post('/users', (req, res) => {
 			res.redirect('/');
 		}
 	});
+});
+
+/************************************************************************
+ *
+ *
+ * 	PUT REQUESTS
+ *
+ *
+ ************************************************************************/
+app.put('/items', (req, res) => {
+	//Handle Put Request
+	db.collection('items').findOneAndUpdate({firstName:'A'}, {
+		$set: {
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
+			email: req.body.email
+		}
+	}, {
+		sort: {_id: -1},
+		upsert: true
+	}, (err, result) => {
+		if(err) return res.send(err);
+		console.log("List item updated!");
+		res.send(result)
+	})
+});
+
+/***************************************************************************
+ *
+ *
+ * 	DELETE REQUESTS
+ *
+ *
+ ***************************************************************************/
+app.delete('/items', (req, res) => {
+	db.collection('items').findOneAndDelete({firstName: req.body.firstName},
+		(err, result) => {
+			if(err) return res.send(500, err);
+			console.log("List item deleted!");
+			res.send(result);
+		});
 });
